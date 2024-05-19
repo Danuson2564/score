@@ -1,156 +1,128 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>โปรแกรมคำนวณเกรด</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <script>
-      function calculateGrade(score) {
-        if (score >= 80) {
-          return "4";
-        } else if (score >= 74) {
-          return "3";
-        } else if (score >= 64) {
-          return "2";
-        } else if (score >= 50) {
-          return "1";
-        } else {
-          return "0";
+        function calculateGrade(score) {
+            if (score >= 80) return "4";
+            else if (score >= 74) return "3";
+            else if (score >= 64) return "2";
+            else if (score >= 50) return "1";
+            else return "0";
         }
-      }
 
-      function calculateAndDisplayGrades() {
-        var numSubjects = parseInt(
-          document.getElementById("num_subjects").value
-        );
-        var subjectTable = document.getElementById("subject-table");
-        subjectTable.innerHTML = `
-                <tr>
-                    <th>ชื่อวิชา</th>
-                    <th>คะแนน</th>
-                    <th>เกรด</th>
-                </tr>
-            `;
+        function calculateAndDisplayGrades() {
+            var numSubjects = parseInt(document.getElementById("num_subjects").value);
+            var subjectTable = document.getElementById("subject-table");
+            subjectTable.innerHTML = `<tr><th>ชื่อวิชา</th><th>คะแนน</th><th>หน่วยกิต</th><th>เกรด</th></tr>`;
 
-        for (var i = 0; i < numSubjects; i++) {
-          var subjectName = document.getElementById("subject_name_" + i).value;
-          var subjectScore = parseFloat(
-            document.getElementById("subject_score_" + i).value
-          );
-          var grade = calculateGrade(subjectScore);
+            var totalWeightedGrades = 0;
+            var totalCredits = 0;
 
-          subjectTable.innerHTML += `
-                    <tr>
-                        <td>${subjectName}</td>
-                        <td>${subjectScore}</td>
-                        <td>${grade}</td>
-                    </tr>
-                `;
+            for (var i = 0; i < numSubjects; i++) {
+                var subjectName = document.getElementById("subject_name_" + i).value;
+                var subjectScore = parseFloat(document.getElementById("subject_score_" + i).value);
+                var subjectCredits = parseFloat(document.getElementById("subject_credits_" + i).value);
+                var grade = calculateGrade(subjectScore);
+                var weightedGrade = grade * subjectCredits;
+
+                totalWeightedGrades += weightedGrade;
+                totalCredits += subjectCredits;
+
+                subjectTable.innerHTML += `<tr><td>${subjectName}</td><td>${subjectScore}</td><td>${subjectCredits}</td><td>${grade}</td></tr>`;
+            }
+
+            var GPA = totalWeightedGrades / totalCredits;
+            subjectTable.innerHTML += `<tr><td colspan="3"><strong>Total GPA</strong></td><td>${GPA.toFixed(2)}</td></tr>`;
         }
-      }
     </script>
-  </head>
-  <body>
+</head>
+<body>
     <nav class="navbar navbar-expand-lg bg-primary">
-      <div class="container">
-        <a class="navbar-brand text-white" href="index.php">ไม่มี logo 555</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div
-          class="collapse navbar-collapse justify-content-end"
-          id="navbarNav"
-        >
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a
-                class="nav-link text-white active"
-                aria-current="page"
-                href="index.html"
-                >เกรด</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="vatrate.html">ภาษี</a>
-            </li>
-          </ul>
+        <div class="container">
+            <a class="navbar-brand text-white" href="#">โปรแกรมคำนวณเกรด</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a
+                    class="nav-link text-white active"
+                    aria-current="page"
+                    href="index.html"
+                    >เกรด</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link text-white" href="vatrate.html">ภาษี</a>
+                </li>
+              </ul>
+            </div>
         </div>
-      </div>
     </nav>
     <div class="container mt-5">
-      <h1 class="mb-5">
-        By <span class="text-info">y</span>
-      </h1>
-      <h1 class="mb-4">โปรแกรมคำนวณเกรด</h1>
-
-      <div class="mb-3">
-        <label for="num_subjects" class="form-label">กรุณากรอกจำนวนวิชา:</label>
-        <input type="number" class="form-control" id="num_subjects" />
-      </div>
-
-      <div id="subject-inputs"></div>
-      <div class="d-grid gap-2">
-        <button onclick="calculateAndDisplayGrades()" class="btn btn-primary">
-          คำนวณเกรด
-        </button>
-      </div>
-
-      <table id="subject-table" class="table table-bordered mt-3"></table>
+        <h1 class="mb-5">By <span class="text-info">y</span></h1>
+        <h1 class="mb-4">โปรแกรมคำนวณเกรด</h1>
+        <div class="mb-3">
+            <label for="num_subjects" class="form-label">กรุณากรอกจำนวนวิชา:</label>
+            <input type="number" class="form-control" id="num_subjects" />
+        </div>
+        <div id="subject-inputs"></div>
+        <div class="d-grid gap-2">
+            <button onclick="calculateAndDisplayGrades()" class="btn btn-primary">คำนวณเกรด</button>
+        </div>
+        <table id="subject-table" class="table table-bordered mt-3"></table>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
     <script>
-      document
-        .getElementById("num_subjects")
-        .addEventListener("input", function () {
-          var numSubjects = parseInt(
-            document.getElementById("num_subjects").value
-          );
-          var subjectInputs = document.getElementById("subject-inputs");
-          subjectInputs.innerHTML = "";
+        document.getElementById("num_subjects").addEventListener("input", function () {
+            var numSubjects = parseInt(document.getElementById("num_subjects").value);
+            var subjectInputs = document.getElementById("subject-inputs");
+            subjectInputs.innerHTML = "";
 
-          for (var i = 0; i < numSubjects; i++) {
-            var inputDiv = document.createElement("div");
-            inputDiv.className = "mb-3";
+            for (var i = 0; i < numSubjects; i++) {
+                var inputDiv = document.createElement("div");
+                inputDiv.className = "mb-3";
 
-            var nameLabel = document.createElement("label");
-            nameLabel.innerHTML = "ชื่อวิชาที่ " + (i + 1) + ": ";
-            nameLabel.htmlFor = "subject_name_" + i;
-            inputDiv.appendChild(nameLabel);
+                var nameLabel = document.createElement("label");
+                nameLabel.innerHTML = "ชื่อวิชาที่ " + (i + 1) + ": ";
+                nameLabel.htmlFor = "subject_name_" + i;
+                inputDiv.appendChild(nameLabel);
 
-            var nameInput = document.createElement("input");
-            nameInput.type = "text";
-            nameInput.className = "form-control";
-            nameInput.id = "subject_name_" + i;
-            inputDiv.appendChild(nameInput);
+                var nameInput = document.createElement("input");
+                nameInput.type = "text";
+                nameInput.className = "form-control";
+                nameInput.id = "subject_name_" + i;
+                inputDiv.appendChild(nameInput);
 
-            var scoreLabel = document.createElement("label");
-            scoreLabel.innerHTML = "คะแนนวิชาที่ " + (i + 1) + ": ";
-            scoreLabel.htmlFor = "subject_score_" + i;
-            inputDiv.appendChild(scoreLabel);
+                var scoreLabel = document.createElement("label");
+                scoreLabel.innerHTML = "คะแนนวิชาที่ " + (i + 1) + ": ";
+                scoreLabel.htmlFor = "subject_score_" + i;
+                inputDiv.appendChild(scoreLabel);
 
-            var scoreInput = document.createElement("input");
-            scoreInput.type = "number";
-            scoreInput.className = "form-control";
-            scoreInput.id = "subject_score_" + i;
-            inputDiv.appendChild(scoreInput);
+                var scoreInput = document.createElement("input");
+                scoreInput.type = "number";
+                scoreInput.className = "form-control";
+                scoreInput.id = "subject_score_" + i;
+                inputDiv.appendChild(scoreInput);
 
-            subjectInputs.appendChild(inputDiv);
-          }
+                var creditsLabel = document.createElement("label");
+                creditsLabel.innerHTML = "หน่วยกิตวิชาที่ " + (i + 1) + ": ";
+                creditsLabel.htmlFor = "subject_credits_" + i;
+                inputDiv.appendChild(creditsLabel);
+
+                var creditsInput = document.createElement("input");
+                creditsInput.type = "number";
+                creditsInput.className = "form-control";
+                creditsInput.id = "subject_credits_" + i;
+                inputDiv.appendChild(creditsInput);
+
+                subjectInputs.appendChild(inputDiv);
+            }
         });
     </script>
-  </body>
+</body>
 </html>
